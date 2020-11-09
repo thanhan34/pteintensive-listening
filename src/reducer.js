@@ -1,6 +1,7 @@
 export const initialState = {
     currentIndex: 0,
     playing: false,
+    user: null
 };
 
 const reducer = (state, action) => {
@@ -17,7 +18,11 @@ const reducer = (state, action) => {
                 ...state,
                 playing: action.playing,
             };
-
+        case "SET_USER":
+            return {
+                ...state,
+                user: action.user
+            }
 
         default:
             return state;
