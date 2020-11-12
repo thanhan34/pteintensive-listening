@@ -3,20 +3,12 @@ import React from 'react'
 import './Login.css'
 import { auth, provider } from "./firebase"
 import { useStateValue } from './StateProvider'
+import logo from "./images/PTE LOGO.jpg"
 
 function Login() {
 
     const [{ user }, dispatch] = useStateValue();
-    // const signIn = () => {
-    //     auth.signInWithPopup(provider).then((result) => {
-    //         dispatch({
-    //             type: "SET_USER",
-    //             user: result.user,
-    //         })
-    //     })
 
-    //         .catch((error) => alert(error.message));
-    // };
     const signIn = () => {
         auth.signInWithPopup(provider).then((result) => {
             dispatch({
@@ -24,13 +16,14 @@ function Login() {
                 user: result.user
             })
         })
+            .catch((error) => alert(error.message))
     }
     return (
         <div className="login">
             <div className="login__container">
-                <img src="pteintensive-listening/src/images/PTE LOGO.jpg" alt="" />
+                <img src={logo} alt="" />
                 <div className="login__text">
-                    <h1>Sign in to Whatsapp</h1>
+                    <h1>Sign in to PTE Intensive MP3</h1>
                 </div>
                 <Button type="submit" onClick={signIn}>Sign In With Google</Button>
             </div>

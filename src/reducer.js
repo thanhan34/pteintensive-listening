@@ -1,6 +1,5 @@
 export const initialState = {
     currentIndex: 0,
-    playing: false,
     user: null
 };
 
@@ -13,11 +12,7 @@ const reducer = (state, action) => {
                 currentIndex: action.currentIndex,
             };
 
-        case "SET_PLAYING":
-            return {
-                ...state,
-                playing: action.playing,
-            };
+
         case "SET_USER":
             return {
                 ...state,

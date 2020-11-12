@@ -1,8 +1,7 @@
 import React from 'react';
 
 const write_from_dictation = [
-
-    "Many graduates of journalism get jobs in the communications field",
+    ["Many graduates of journalism get jobs in the communications field. Answer: Earth"],
     "Clinical placements in nursing prepare students for professional practice",
     "Physics is a key subject for understanding the world and the universe",
     "Observers waited nervously and with bated breath for the concert",

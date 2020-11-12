@@ -1,5 +1,6 @@
 
 const playAudio = (sentence) => {
-    window.responsiveVoice.speak(sentence)
+    window.speechSynthesis.speak(new SpeechSynthesisUtterance(sentence))
+
 }
 export default playAudio

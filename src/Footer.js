@@ -12,46 +12,92 @@ import "./Footer.css";
 import { Grid, Slider } from "@material-ui/core";
 import write_from_dictation from '../src/data/write_from_dictation'
 import playAudio from './playAudio'
+import Filter3Icon from '@material-ui/icons/Filter3';
+import { auth } from "./firebase";
 
 function Footer() {
-    const [{ currentIndex, playing }, dispatch] = useStateValue();
-    const [localIndex, setLocalIndex] = useState(0)
+    const [{ currentIndex }, dispatch] = useStateValue();
+    const [localIndex, setLocalIndex] = useState(-1)
     const [currentSentence, setCurrentSentence] = useState("")
     const [timeoutInterval, setTimeoutInterval] = useState(null)
-
+    const [speakIndex, setSpeakIndex] = useState(0)
+    const [speakMode, setSpeakMode] = useState(true)
+    const [playing, setPlaying] = useState(false)
+    useEffect(() => {
+        // setSpeakIndex(0)
+        setLocalIndex(0)
+    }, [])
     useEffect(() => {
         playAudio(write_from_dictation[localIndex])
         setCurrentSentence(write_from_dictation[localIndex])
+        dispatch({
+            type: "SET_INDEX",
+            currentIndex: localIndex
+        })
     }, [localIndex])
+    useEffect(() => {
+        const repeatSentence = () => {
+            for (var i = 0; i <= 2; i++) {
+                playAudio(write_from_dictation[currentIndex + 1])
+            }
+        }
+        repeatSentence()
+        setCurrentSentence(write_from_dictation[currentIndex + 1])
+        dispatch({
+            type: "SET_INDEX",
+            currentIndex: currentIndex + 1
+        })
+    }, [speakIndex])
 
+    const handleRepeatSentence = () => {
+
+        setSpeakMode(!speakMode)
+        stopTimer()
+        setPlaying(false)
+        speechSynthesis.cancel()
+    }
     const stopTimer = () => {
         clearInterval(timeoutInterval)
     }
-    const handlePlayPause = () => {
-        dispatch({
-            type: "SET_PLAYING",
-            playing: !playing
-        })
 
+    const playOne = () => {
+        setLocalIndex(currentIndex)
+        playAudio(write_from_dictation[localIndex])
+        const timer = setInterval(() => setLocalIndex(localIndex => localIndex + 1), 8000)
+        setTimeoutInterval(timer)
+    }
+
+    const playThree = () => {
+        setCurrentSentence(write_from_dictation[currentIndex])
+        for (var i = 0; i <= 2; i++) {
+            playAudio(write_from_dictation[currentIndex])
+        }
+        const timer = setInterval(() => setSpeakIndex(speakIndex => speakIndex + 1), 20000)
+        setTimeoutInterval(timer)
+    }
+
+    const handlePlayPause = () => {
+        setPlaying(!playing)
+        stopTimer()
         if (!playing) {
-            setLocalIndex(currentIndex)
-            playAudio(write_from_dictation[localIndex])
-            const timer = setInterval(() => setLocalIndex(localIndex => localIndex + 1), 8000)
-            setTimeoutInterval(timer)
+            if (speakMode) {
+                playOne()
+            }
+            else {
+                playThree()
+            }
         }
         else {
             dispatch({
                 type: "SET_INDEX",
                 currentIndex: localIndex
             })
-            stopTimer()
-            window.responsiveVoice.cancel()
+            speechSynthesis.cancel()
         }
     }
 
-
     const skipNext = () => {
-        window.responsiveVoice.cancel()
+        speechSynthesis.cancel()
         dispatch({
             type: "SET_INDEX",
             currentIndex: currentIndex + 1
@@ -60,7 +106,7 @@ function Footer() {
     };
 
     const skipPrevious = () => {
-        window.responsiveVoice.cancel()
+        speechSynthesis.cancel()
         if (currentIndex === 0) {
             playAudio(write_from_dictation[currentIndex])
         } else {
@@ -76,7 +122,7 @@ function Footer() {
         <div className="footer">
             <div className="footer__left">
                 <div className="footer__songInfo">
-                    <h4>Write From Dictation {localIndex + 1}</h4>
+                    <h4>Write From Dictation {currentIndex + 1}</h4>
                     <p>{currentSentence}</p>
                 </div>
             </div>
@@ -98,7 +144,17 @@ function Footer() {
                         />
                     )}
                 <SkipNextIcon onClick={skipNext} className="footer__icon" />
-                <RepeatIcon className="footer__green" />
+
+                {
+                    speakMode ? (<RepeatIcon
+                        className="footer__green"
+                        onClick={() => handleRepeatSentence()} />
+                    ) : (
+                            <Filter3Icon
+                                className="footer__green"
+                                onClick={() => handleRepeatSentence()} />
+                        )
+                }
             </div>
 
             <div className="footer__right">

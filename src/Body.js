@@ -6,10 +6,6 @@ import SongRow from './SongRow';
 import { useStateValue } from "./StateProvider";
 
 function Body() {
-    const [{ currentIndex }] = useStateValue();
-    const [currentSentence, setCurrentSentence] = useState("")
-
-
 
     return (
         <div className="body">
@@ -19,18 +15,15 @@ function Body() {
                 <div className="body__infoText">
                     <strong>PLAYLIST</strong>
                     <h2>Write From Dictation</h2>
-
                 </div>
             </div>
 
             <div className="body__songs">
-
                 {
                     write_from_dictation.map((sentence, index) => (
                         <SongRow key={index} sentence={sentence} index={index} />
                     ))
                 }
-
             </div>
         </div>
     )

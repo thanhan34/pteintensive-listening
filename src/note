@@ -1,20 +1,22 @@
-  // if (playing) {
-        //     window.responsiveVoice.cancel();
-        // } else {
-        //     playAudio(write_from_dictation[currentIndex])
-        //     for (var i = 0; i < write_from_dictation.length - currentIndex; i++) {
-        //         (function (i) {
-        //             waitingTimeArray.push(setTimeout(function () {
-        //                 playAudio(write_from_dictation[i + currentIndex + 1])
-        //                 dispatch({
-        //                     type: "SET_INDEX",
-        //                     currentIndex: i + currentIndex + 1
-        //                 })
-
-        //             }, 8000 * i))
-        //         })(i);
-
-        //     };
+chay nhieu lan
+// click
+// kiem tra xem play bao nhieu lan
+// play audio bay nhieu lan
+// sau do tang index play audio khac
+// reset so lan lai bang 0
+// play audio bay nhieu lan lai
 
 
-        // }
+
+ playAudio(write_from_dictation[currentIndex])
+            for (var i = 0; i < write_from_dictation.length - currentIndex; i++) {
+                (function (i) {
+                    waitingTimeArray.push(setTimeout(function () {
+                        playAudio(write_from_dictation[i + currentIndex + 1])
+                        dispatch({
+                            type: "SET_INDEX",
+                            currentIndex: i + currentIndex + 1
+                        })
+
+                    }, 8000 * i))
+                })(i);
