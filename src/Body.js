@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import './Body.css'
 import Header from './Header'
-import write_from_dictation from '../src/data/write_from_dictation'
+
 import SongRow from './SongRow';
 import { useStateValue } from "./StateProvider";
 
-function Body() {
+function Body({ array }) {
 
     return (
         <div className="body">
@@ -20,7 +20,7 @@ function Body() {
 
             <div className="body__songs">
                 {
-                    write_from_dictation.map((sentence, index) => (
+                    array.map((sentence, index) => (
                         <SongRow key={index} sentence={sentence} index={index} />
                     ))
                 }

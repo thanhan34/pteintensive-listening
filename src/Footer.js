@@ -10,26 +10,28 @@ import PauseCircleOutlineIcon from "@material-ui/icons/PauseCircleOutline";
 import PlaylistPlayIcon from "@material-ui/icons/PlaylistPlay";
 import "./Footer.css";
 import { Grid, Slider } from "@material-ui/core";
-import write_from_dictation from '../src/data/write_from_dictation'
 import playAudio from './playAudio'
 import Filter3Icon from '@material-ui/icons/Filter3';
-import { auth } from "./firebase";
 
-function Footer() {
+
+function Footer({ array }) {
     const [{ currentIndex }, dispatch] = useStateValue();
     const [localIndex, setLocalIndex] = useState(-1)
     const [currentSentence, setCurrentSentence] = useState("")
     const [timeoutInterval, setTimeoutInterval] = useState(null)
     const [speakIndex, setSpeakIndex] = useState(0)
-    const [speakMode, setSpeakMode] = useState(true)
+    const [speakMode, setSpeakMode] = useState(false)
+    const [speakValue, setSpeakValue] = useState("")
     const [playing, setPlaying] = useState(false)
+    const [shufferIndex, setShufferIndex] = useState(-1)
     useEffect(() => {
-        // setSpeakIndex(0)
+        setSpeakIndex(0)
         setLocalIndex(0)
+        setSpeakValue("One")
     }, [])
     useEffect(() => {
-        playAudio(write_from_dictation[localIndex])
-        setCurrentSentence(write_from_dictation[localIndex])
+        playAudio(array[localIndex])
+        setCurrentSentence(array[localIndex])
         dispatch({
             type: "SET_INDEX",
             currentIndex: localIndex
@@ -38,23 +40,45 @@ function Footer() {
     useEffect(() => {
         const repeatSentence = () => {
             for (var i = 0; i <= 2; i++) {
-                playAudio(write_from_dictation[currentIndex + 1])
+                playAudio(array[currentIndex + 1])
             }
         }
         repeatSentence()
-        setCurrentSentence(write_from_dictation[currentIndex + 1])
+        setCurrentSentence(array[currentIndex + 1])
         dispatch({
             type: "SET_INDEX",
             currentIndex: currentIndex + 1
         })
     }, [speakIndex])
 
-    const handleRepeatSentence = () => {
+    useEffect(() => {
+        playAudio(array[shufferIndex])
+        dispatch({
+            type: "SET_INDEX",
+            currentIndex: shufferIndex
+        })
+        setCurrentSentence(array[shufferIndex])
+    }, [shufferIndex])
 
+
+    const shufferSentence = () => {
+
+        setSpeakValue("Shuffer")
+    }
+    const playShuffer = () => {
+        stopTimer()
+        speechSynthesis.cancel()
+        setLocalIndex(currentIndex)
+        playAudio(array[localIndex])
+        const timer = setInterval(() => setShufferIndex(Math.floor(Math.random() * array.length)), 8000)
+        setTimeoutInterval(timer)
+    }
+    const handleRepeatSentence = () => {
         setSpeakMode(!speakMode)
         stopTimer()
         setPlaying(false)
         speechSynthesis.cancel()
+        speakMode ? setSpeakValue("One") : setSpeakValue("Three")
     }
     const stopTimer = () => {
         clearInterval(timeoutInterval)
@@ -62,15 +86,15 @@ function Footer() {
 
     const playOne = () => {
         setLocalIndex(currentIndex)
-        playAudio(write_from_dictation[localIndex])
+        playAudio(array[localIndex])
         const timer = setInterval(() => setLocalIndex(localIndex => localIndex + 1), 8000)
         setTimeoutInterval(timer)
     }
 
     const playThree = () => {
-        setCurrentSentence(write_from_dictation[currentIndex])
+        setCurrentSentence(array[currentIndex])
         for (var i = 0; i <= 2; i++) {
-            playAudio(write_from_dictation[currentIndex])
+            playAudio(array[currentIndex])
         }
         const timer = setInterval(() => setSpeakIndex(speakIndex => speakIndex + 1), 20000)
         setTimeoutInterval(timer)
@@ -80,11 +104,22 @@ function Footer() {
         setPlaying(!playing)
         stopTimer()
         if (!playing) {
-            if (speakMode) {
-                playOne()
-            }
-            else {
-                playThree()
+            // if (speakMode) {
+            //     playOne()
+            // }
+            // else {
+            //     playThree()
+            // }
+            switch (speakValue) {
+                case "Three":
+                    playThree()
+                    break;
+                case "Shuffer":
+                    playShuffer()
+                    break;
+                default:
+                    playOne()
+                    break;
             }
         }
         else {
@@ -102,19 +137,19 @@ function Footer() {
             type: "SET_INDEX",
             currentIndex: currentIndex + 1
         })
-        playAudio(write_from_dictation[currentIndex])
+        playAudio(array[currentIndex])
     };
 
     const skipPrevious = () => {
         speechSynthesis.cancel()
         if (currentIndex === 0) {
-            playAudio(write_from_dictation[currentIndex])
+            playAudio(array[currentIndex])
         } else {
             dispatch({
                 type: "SET_INDEX",
                 currentIndex: currentIndex - 1
             })
-            playAudio(write_from_dictation[currentIndex])
+            playAudio(array[currentIndex])
         }
     };
 
@@ -128,7 +163,7 @@ function Footer() {
             </div>
 
             <div className="footer__center">
-                <ShuffleIcon className="footer__green" />
+                <ShuffleIcon className="footer__green" onClick={shufferSentence} />
                 <SkipPreviousIcon onClick={skipPrevious} className="footer__icon" />
                 {playing ? (
                     <PauseCircleOutlineIcon

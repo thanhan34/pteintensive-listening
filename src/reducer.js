@@ -11,8 +11,6 @@ const reducer = (state, action) => {
                 ...state,
                 currentIndex: action.currentIndex,
             };
-
-
         case "SET_USER":
             return {
                 ...state,

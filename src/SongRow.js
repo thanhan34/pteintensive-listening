@@ -1,6 +1,5 @@
 import React from 'react'
 import './SongRow.css'
-import write_from_dictation from '../src/data/write_from_dictation'
 import GraphicEqIcon from '@material-ui/icons/GraphicEq';
 import { useStateValue } from "./StateProvider";
 import playAudio from './playAudio';
@@ -16,13 +15,12 @@ function SongRow({ sentence, index }) {
     }
     return (
         <div className="songRow" onClick={playSong}>
-            {/* <img className="songRow__album" src={track.album.images[0].url} alt="" /> */}
+
             <div className="songRow__info">
                 <div className="songRow__header">
                     <GraphicEqIcon />
                     <h1>WFD {index + 1}</h1>
                 </div>
-
                 <p>
                     {sentence}
                 </p>
