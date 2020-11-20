@@ -14,27 +14,36 @@ import playAudio from './playAudio'
 import Filter3Icon from '@material-ui/icons/Filter3';
 
 
-function Footer({ array }) {
-    const [{ currentIndex }, dispatch] = useStateValue();
-    const [localIndex, setLocalIndex] = useState(-1)
-    const [currentSentence, setCurrentSentence] = useState("")
+function Footer({ array, title }) {
+    const [{ currentIndex, currentSentence, titlePlayer, timer, playing }, dispatch] = useStateValue();
+    const [localIndex, setLocalIndex] = useState(0)
+    // const [currentSentence, setCurrentSentence] = useState("")
     const [timeoutInterval, setTimeoutInterval] = useState(null)
     const [speakIndex, setSpeakIndex] = useState(0)
+    //const speakIndex = 0
     const [speakMode, setSpeakMode] = useState(false)
-    const [speakValue, setSpeakValue] = useState("")
-    const [playing, setPlaying] = useState(false)
-    const [shufferIndex, setShufferIndex] = useState(-1)
-    useEffect(() => {
-        setSpeakIndex(0)
-        setLocalIndex(0)
-        setSpeakValue("One")
-    }, [])
+    const [speakValue, setSpeakValue] = useState("One")
+    // const [playing, setPlaying] = useState(false)
+    const [shufferIndex, setShufferIndex] = useState(0)
+    // useEffect(() => {
+
+    //     setSpeakValue("One")
+    //     speechSynthesis.cancel()
+
+    // }, [])
     useEffect(() => {
         playAudio(array[localIndex])
-        setCurrentSentence(array[localIndex])
+        dispatch({
+            type: "SET_CURRENTSENTENCE",
+            currentSentence: array[localIndex]
+        })
         dispatch({
             type: "SET_INDEX",
             currentIndex: localIndex
+        })
+        dispatch({
+            type: "SET_TIMER",
+            timer: timeoutInterval
         })
     }, [localIndex])
     useEffect(() => {
@@ -44,10 +53,17 @@ function Footer({ array }) {
             }
         }
         repeatSentence()
-        setCurrentSentence(array[currentIndex + 1])
+        dispatch({
+            type: "SET_CURRENTSENTENCE",
+            currentSentence: array[currentIndex + 1]
+        })
         dispatch({
             type: "SET_INDEX",
             currentIndex: currentIndex + 1
+        })
+        dispatch({
+            type: "SET_TIMER",
+            timer: timeoutInterval
         })
     }, [speakIndex])
 
@@ -57,12 +73,14 @@ function Footer({ array }) {
             type: "SET_INDEX",
             currentIndex: shufferIndex
         })
-        setCurrentSentence(array[shufferIndex])
+        dispatch({
+            type: "SET_CURRENTSENTENCE",
+            currentSentence: array[shufferIndex]
+        })
     }, [shufferIndex])
 
 
     const shufferSentence = () => {
-
         setSpeakValue("Shuffer")
     }
     const playShuffer = () => {
@@ -72,11 +90,19 @@ function Footer({ array }) {
         playAudio(array[localIndex])
         const timer = setInterval(() => setShufferIndex(Math.floor(Math.random() * array.length)), 8000)
         setTimeoutInterval(timer)
+        dispatch({
+            type: "SET_TIMER",
+            timer: timer
+        })
     }
     const handleRepeatSentence = () => {
         setSpeakMode(!speakMode)
         stopTimer()
-        setPlaying(false)
+        // setPlaying(false)
+        dispatch({
+            type: "SET_PLAYING",
+            playing: false
+        })
         speechSynthesis.cancel()
         speakMode ? setSpeakValue("One") : setSpeakValue("Three")
     }
@@ -92,7 +118,10 @@ function Footer({ array }) {
     }
 
     const playThree = () => {
-        setCurrentSentence(array[currentIndex])
+        dispatch({
+            type: "SET_CURRENTSENTENCE",
+            currentSentence: array[currentIndex]
+        })
         for (var i = 0; i <= 2; i++) {
             playAudio(array[currentIndex])
         }
@@ -101,15 +130,16 @@ function Footer({ array }) {
     }
 
     const handlePlayPause = () => {
-        setPlaying(!playing)
+        dispatch({
+            type: "SET_PLAYING",
+            playing: !playing
+        })
         stopTimer()
+        dispatch({
+            type: "SET_TITLE",
+            titlePlayer: title
+        })
         if (!playing) {
-            // if (speakMode) {
-            //     playOne()
-            // }
-            // else {
-            //     playThree()
-            // }
             switch (speakValue) {
                 case "Three":
                     playThree()
@@ -123,33 +153,35 @@ function Footer({ array }) {
             }
         }
         else {
-            dispatch({
-                type: "SET_INDEX",
-                currentIndex: localIndex
-            })
+            // dispatch({
+            //     type: "SET_INDEX",
+            //     currentIndex: localIndex
+            // })
             speechSynthesis.cancel()
         }
     }
 
     const skipNext = () => {
+        stopTimer()
         speechSynthesis.cancel()
         dispatch({
-            type: "SET_INDEX",
-            currentIndex: currentIndex + 1
+            type: "SET_TITLE",
+            titlePlayer: title
         })
-        playAudio(array[currentIndex])
+        setLocalIndex(localIndex => localIndex + 1)
     };
 
     const skipPrevious = () => {
+        stopTimer()
         speechSynthesis.cancel()
+        dispatch({
+            type: "SET_TITLE",
+            titlePlayer: title
+        })
         if (currentIndex === 0) {
             playAudio(array[currentIndex])
         } else {
-            dispatch({
-                type: "SET_INDEX",
-                currentIndex: currentIndex - 1
-            })
-            playAudio(array[currentIndex])
+            setLocalIndex(localIndex => localIndex - 1)
         }
     };
 
@@ -157,7 +189,7 @@ function Footer({ array }) {
         <div className="footer">
             <div className="footer__left">
                 <div className="footer__songInfo">
-                    <h4>Write From Dictation {currentIndex + 1}</h4>
+                    <h4>{titlePlayer} {currentIndex + 1 === 0 ? "" : currentIndex + 1}</h4>
                     <p>{currentSentence}</p>
                 </div>
             </div>

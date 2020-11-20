@@ -1,7 +1,5 @@
 import './App.css';
 import Player from './Player';
-
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
 import { useStateValue } from './StateProvider'
 import Login from './Login';
 function App() {
