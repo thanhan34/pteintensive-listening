@@ -11,7 +11,12 @@ import {
 import write_from_dictation from './data/write_from_dictation'
 import repeat_sentence from './data/repeat_sentence'
 import answer_short_question from './data/answer_short_question'
+
+
 function Player() {
+
+
+
     return (
         <div className="player">
             <Router>

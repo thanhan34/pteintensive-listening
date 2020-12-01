@@ -17,20 +17,12 @@ import Filter3Icon from '@material-ui/icons/Filter3';
 function Footer({ array, title }) {
     const [{ currentIndex, currentSentence, titlePlayer, timer, playing }, dispatch] = useStateValue();
     const [localIndex, setLocalIndex] = useState(0)
-    // const [currentSentence, setCurrentSentence] = useState("")
     const [timeoutInterval, setTimeoutInterval] = useState(null)
     const [speakIndex, setSpeakIndex] = useState(0)
-    //const speakIndex = 0
     const [speakMode, setSpeakMode] = useState(false)
     const [speakValue, setSpeakValue] = useState("One")
-    // const [playing, setPlaying] = useState(false)
     const [shufferIndex, setShufferIndex] = useState(0)
-    // useEffect(() => {
 
-    //     setSpeakValue("One")
-    //     speechSynthesis.cancel()
-
-    // }, [])
     useEffect(() => {
         playAudio(array[localIndex])
         dispatch({

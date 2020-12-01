@@ -6,7 +6,7 @@
   flex: 0.8;
   color: white;
   background: linear-gradient(transparent, rgba(0, 0, 0, 1));
-  background-color: rgb(91, 87, 115);
+  background-color: #d87a16;
 }
 
 .body::-webkit-scrollbar {
@@ -14,9 +14,13 @@
 }
 
 .body__info {
+  position: sticky;
+  z-index: 1000;
+  top: 0;
   display: flex;
   align-items: flex-end;
   padding: 10px;
+  background-color: #282828;
 }
 
 .body__shuffle {
@@ -72,4 +76,9 @@
 
 .body__infoText > p {
   font-size: 14px;
+}
+@media only screen and (max-width: 768px) {
+  .body {
+    flex: 1;
+  }
 }

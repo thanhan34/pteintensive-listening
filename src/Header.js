@@ -1,19 +1,24 @@
-import React from 'react'
+import React, { useState } from 'react'
 import "./Header.css";
 import { useStateValue } from "./StateProvider";
 import { Avatar } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import MenuIcon from '@material-ui/icons/Menu';
 
 function Header() {
-    const [{ user }, dispatch] = useStateValue();
+    const [{ user, toggle }, dispatch] = useStateValue();
+    // const [isToggle, setIsToggle] = useState(false)
+    const toggleMenu = () => {
+        dispatch({
+            type: "SET_TOGGLE",
+            toggle: !toggle
+        })
+    }
     return (
         <div className="header">
             <div className="header__left">
-                <SearchIcon />
-                <input
-                    placeholder="Search for Artists, Songs, or Podcasts "
-                    type="text"
-                />
+                <MenuIcon onClick={toggleMenu} className="headerLeft_icon" />
+                <p>PTE Intensive</p>
             </div>
             <div className="header__right">
                 <Avatar alt={user?.display_name} src={user?.photoURL} />

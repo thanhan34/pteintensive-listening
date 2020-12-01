@@ -2,9 +2,13 @@ import React from 'react'
 import './Body.css'
 import Header from './Header'
 import SongRow from './SongRow';
+import { useStateValue } from "./StateProvider";
 
 
 function Body({ array, title }) {
+
+    const [{ currentSentence }, dispatch] = useStateValue();
+
     return (
         <div className="body">
             <Header />
@@ -12,6 +16,7 @@ function Body({ array, title }) {
                 <div className="body__infoText">
                     <strong>PLAYLIST</strong>
                     <h2>{title}</h2>
+                    <p>{currentSentence}</p>
                 </div>
             </div>
 

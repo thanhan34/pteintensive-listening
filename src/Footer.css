@@ -10,7 +10,7 @@
 }
 
 .footer__right * .MuiSlider-root {
-  color: green;
+  color: #d87a16;
 }
 .footer__left {
   display: flex;
@@ -21,7 +21,7 @@
 }
 
 .footer__green {
-  color: #1ed15e;
+  color: #d87a16;
 }
 
 .footer__center {
@@ -61,4 +61,10 @@
 
 .footer__songInfo > p {
   font-size: 12px;
+}
+@media only screen and (max-width: 768px) {
+  .footer__left,
+  .footer__right {
+    visibility: hidden;
+  }
 }

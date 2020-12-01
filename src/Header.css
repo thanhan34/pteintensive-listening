@@ -12,19 +12,24 @@
 .header__left {
   flex: 0.5;
   display: flex;
-  background-color: white;
+  /* background-color: white; */
   padding: 10px;
-  border-radius: 30px;
-  color: gray;
+  /* border-radius: 30px; */
+  color: white;
   align-items: center;
 }
-
-.header__left > input {
-  border: none;
-  outline-width: 0;
-  width: 100%;
+.header__left > p {
+  margin-left: 10px;
+  font-size: larger;
 }
-
+.headerLeft_icon {
+  display: none !important;
+}
 .header__right > h4 {
   margin-left: 10px;
+}
+@media only screen and (max-width: 768px) {
+  .headerLeft_icon {
+    display: inline !important;
+  }
 }

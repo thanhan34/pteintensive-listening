@@ -4,7 +4,7 @@ const answer_short_question = [
     "Animals with white ivory and long trunk ? Answer : Elephant",
     "How many days are added in February during a leap year? Answer: One.",
     "How many quarters in a calendar year? Answer: Four",
-    "How many days are thre in a week? Answer:  Seven",
+    "How many days are there in a week? Answer:  Seven",
     "What is the ceremony where two people get married? Answer: Wedding.",
     "How many years are there in the passage of a decade? Answer:  Ten",
     "How many years are there in a millennium? Answer: 1000 years.",

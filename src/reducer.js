@@ -4,7 +4,8 @@ export const initialState = {
     titlePlayer: "No music to play",
     timer: null,
     playing: false,
-    user: null
+    user: null,
+    toggle: true,
 };
 
 const reducer = (state, action) => {
@@ -14,6 +15,11 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 currentIndex: action.currentIndex,
+            };
+        case "SET_TOGGLE":
+            return {
+                ...state,
+                toggle: action.toggle,
             };
         case "SET_PLAYING":
             return {
