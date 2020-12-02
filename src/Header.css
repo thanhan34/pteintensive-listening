@@ -32,4 +32,7 @@
   .headerLeft_icon {
     display: inline !important;
   }
+  .header__left > p {
+    font-size: smaller;
+  }
 }

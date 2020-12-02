@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Header.css";
 import { useStateValue } from "./StateProvider";
 import { Avatar } from "@material-ui/core";
@@ -6,8 +6,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import MenuIcon from '@material-ui/icons/Menu';
 
 function Header() {
+
     const [{ user, toggle }, dispatch] = useStateValue();
-    // const [isToggle, setIsToggle] = useState(false)
+
+
     const toggleMenu = () => {
         dispatch({
             type: "SET_TOGGLE",

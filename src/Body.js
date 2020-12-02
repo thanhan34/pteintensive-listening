@@ -4,11 +4,8 @@ import Header from './Header'
 import SongRow from './SongRow';
 import { useStateValue } from "./StateProvider";
 
-
 function Body({ array, title }) {
-
     const [{ currentSentence }, dispatch] = useStateValue();
-
     return (
         <div className="body">
             <Header />

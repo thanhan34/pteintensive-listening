@@ -81,4 +81,7 @@
   .body {
     flex: 1;
   }
+  .body__infoText > h2 {
+    font-size: x-large;
+  }
 }
